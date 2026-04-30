@@ -1,0 +1,44 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+ 
+body {
+  font-family: sans-serif;
+  padding: auto;
+}
+ 
+nav {
+  margin: auto;
+}
+ 
+nav button {
+  margin-right: auto;
+  padding: auto;
+  cursor: pointer;
+}
+ 
+button {
+  padding: auto;
+  cursor: pointer;
+  margin: auto;
+}
+ 
+input, select {
+  padding: auto;
+  margin: auto;
+}
+ 
+form {
+  margin: auto;
+}
+ 
+ul {
+  margin-left: auto;
+}
+ 
+li {
+  margin: auto;
+}
+ 
