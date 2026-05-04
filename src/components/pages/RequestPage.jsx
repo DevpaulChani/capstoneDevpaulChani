@@ -1,38 +1,38 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+ 
 export default function RequestPage({ currentUser, users, availableTimes, meetingRequests, onLogout, onRequestMeeting, onAcceptRequest, onDenyRequest }) {
   const navigate = useNavigate()
   const [selectedUserId, setSelectedUserId] = useState(null)
-
+ 
   if (!currentUser) return <div>Loading...</div>
-
+ 
   const handleLogout = () => {
     onLogout()
     navigate('/')
   }
-
+ 
   const otherUsers = users.filter(u => u.id !== currentUser.id)
   const selectedUser = selectedUserId ? users.find(u => u.id === selectedUserId) : null
   const selectedUserTimes = selectedUserId ? availableTimes.filter(t => t.userId === selectedUserId) : []
-
+ 
   const handleRequestMeeting = async (proposedTimeId) => {
     await onRequestMeeting(currentUser.id, selectedUserId, proposedTimeId)
   }
-
+ 
   // Get pending requests to current user
   const pendingRequests = meetingRequests.filter(
     req => req.requesteeId === currentUser.id && req.statusId === 1
   )
-
+ 
   const handleAcceptRequest = async (requestId) => {
     await onAcceptRequest(requestId)
   }
-
+ 
   const handleDenyRequest = async (requestId) => {
     await onDenyRequest(requestId)
   }
-
+ 
   return (
     <div>
       <h1>Request Page</h1>
@@ -42,7 +42,7 @@ export default function RequestPage({ currentUser, users, availableTimes, meetin
         <button onClick={() => navigate('/app/request')}>Request</button>
         <button onClick={handleLogout}>Logout</button>
       </nav>
-
+ 
       <h2>Pending Requests to You</h2>
       {pendingRequests.length === 0 ? (
         <p>No pending requests</p>
@@ -61,7 +61,7 @@ export default function RequestPage({ currentUser, users, availableTimes, meetin
           })}
         </div>
       )}
-
+ 
       <h2>Request a Meeting</h2>
       <div>
         <label>Select User: </label>
@@ -74,7 +74,7 @@ export default function RequestPage({ currentUser, users, availableTimes, meetin
           ))}
         </select>
       </div>
-
+ 
       {selectedUser && (
         <div style={{ marginTop: '20px' }}>
           <h3>{selectedUser.userName}'s Available Times</h3>

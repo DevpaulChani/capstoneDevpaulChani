@@ -6,16 +6,16 @@ import MyMeetingsPage from './components/pages/MyMeetingsPage'
 import MyTimesPage from './components/pages/MyTimesPage'
 import RequestPage from './components/pages/RequestPage'
 import * as api from './api/apiService'
-
+ 
 export default function App() {
   const [currentUserId, setCurrentUserId] = useState(null)
   const [users, setUsers] = useState([])
   const [availableTimes, setAvailableTimes] = useState([])
   const [meetingRequests, setMeetingRequests] = useState([])
   const [statuses, setStatuses] = useState([])
-
-
-
+  const [loading, setLoading] = useState(true)
+ 
+  // Load all data from server on mount
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -31,13 +31,14 @@ export default function App() {
         setStatuses(statusesData)
       } catch (error) {
         console.error('Error loading data:', error)
+      } finally {
+        setLoading(false)
       }
-
     }
-
+ 
     loadData()
   }, [])
-
+ 
   // Load currentUserId from localStorage on mount
   useEffect(() => {
     const savedUserId = localStorage.getItem('currentUserId')
@@ -45,7 +46,7 @@ export default function App() {
       setCurrentUserId(parseInt(savedUserId))
     }
   }, [])
-
+ 
   // Save currentUserId to localStorage whenever it changes
   useEffect(() => {
     if (currentUserId) {
@@ -54,15 +55,15 @@ export default function App() {
       localStorage.removeItem('currentUserId')
     }
   }, [currentUserId])
-
+ 
   const handleLogin = (userId) => {
     setCurrentUserId(userId)
   }
-
+ 
   const handleLogout = () => {
     setCurrentUserId(null)
   }
-
+ 
   const handleRegister = async (userName) => {
     try {
       const newUser = await api.createUser(userName)
@@ -74,7 +75,7 @@ export default function App() {
       console.error('Error registering user:', error)
     }
   }
-
+ 
   const handleAddAvailableTime = async (userId, time) => {
     try {
       const newTime = await api.createAvailableTime(userId, time)
@@ -85,7 +86,7 @@ export default function App() {
       console.error('Error adding available time:', error)
     }
   }
-
+ 
   const handleDeleteAvailableTime = async (timeId) => {
     try {
       const success = await api.deleteAvailableTime(timeId)
@@ -96,7 +97,7 @@ export default function App() {
       console.error('Error deleting available time:', error)
     }
   }
-
+ 
   const handleRequestMeeting = async (requesterId, requesteeId, proposedTimeId) => {
     try {
       const newRequest = await api.createMeetingRequest(requesterId, requesteeId, proposedTimeId)
@@ -107,7 +108,7 @@ export default function App() {
       console.error('Error creating meeting request:', error)
     }
   }
-
+ 
   const handleAcceptRequest = async (requestId) => {
     try {
       const updatedRequest = await api.updateMeetingRequestStatus(requestId, 2)
@@ -120,7 +121,7 @@ export default function App() {
       console.error('Error accepting request:', error)
     }
   }
-
+ 
   const handleDenyRequest = async (requestId) => {
     try {
       const success = await api.deleteMeetingRequest(requestId)
@@ -131,7 +132,7 @@ export default function App() {
       console.error('Error denying request:', error)
     }
   }
-
+ 
   const handleCancelMeeting = async (meetingId) => {
     try {
       const success = await api.deleteMeetingRequest(meetingId)
@@ -142,10 +143,13 @@ export default function App() {
       console.error('Error canceling meeting:', error)
     }
   }
-
+ 
   const currentUser = users.find(u => u.id === currentUserId)
-
-
+ 
+  if (loading) {
+    return <div>Loading app...</div>
+  }
+ 
   return (
     <BrowserRouter>
       <Routes>

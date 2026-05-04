@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+ 
 export default function Login({ users, onLogin }) {
   const [selectedUserId, setSelectedUserId] = useState('')
   const navigate = useNavigate()
-
+ 
   const handleLogin = (e) => {
     e.preventDefault()
     if (selectedUserId) {
@@ -12,7 +12,7 @@ export default function Login({ users, onLogin }) {
       navigate('/app/my-meetings')
     }
   }
-
+ 
   return (
     <div>
       <h1>Login</h1>

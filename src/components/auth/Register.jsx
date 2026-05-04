@@ -1,29 +1,29 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+ 
 export default function Register({ onRegister, users }) {
   const [userName, setUserName] = useState('')
   const [error, setError] = useState('')
   const navigate = useNavigate()
-
+ 
   const handleRegister = (e) => {
     e.preventDefault()
     setError('')
-
+ 
     if (!userName.trim()) {
       setError('Username cannot be empty')
       return
     }
-
+ 
     if (users.some(u => u.userName === userName)) {
       setError('Username already exists')
       return
     }
-
+ 
     onRegister(userName)
     navigate('/app/my-meetings')
   }
-
+ 
   return (
     <div>
       <h1>Register</h1>
