@@ -101,18 +101,18 @@ export const createMeetingRequest = async (requesterId, requesteeId, proposedTim
 
 export const updateMeetingRequestStatus = async (requestId, statusId) => {
   try {
-    // First, fetch the current meeting request to preserve all properties
+    
     const getResponse = await fetch(`${API_URL}/meetingRequests/${requestId}`)
     if (!getResponse.ok) throw new Error('Failed to fetch meeting request')
     const currentRequest = await getResponse.json()
 
-    // Then, update it with all properties intact
+    
     const response = await fetch(`${API_URL}/meetingRequests/${requestId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        ...currentRequest,  // Keep all existing properties
-        statusId            // Update only the statusId
+        ...currentRequest,  
+        statusId            
       })
     })
     if (!response.ok) throw new Error('Failed to update meeting request')
@@ -136,7 +136,7 @@ export const deleteMeetingRequest = async (requestId) => {
   }
 }
 
-// Statuses
+
 export const getStatuses = async () => {
   try {
     const response = await fetch(`${API_URL}/statuses`)
