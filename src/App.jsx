@@ -15,7 +15,7 @@ export default function App() {
   const [statuses, setStatuses] = useState([])
   const [loading, setLoading] = useState(true)
  
-  // Load all data from server on mount
+  
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -39,7 +39,7 @@ export default function App() {
     loadData()
   }, [])
  
-  // Load currentUserId from localStorage on mount
+  
   useEffect(() => {
     const savedUserId = localStorage.getItem('currentUserId')
     if (savedUserId) {
@@ -47,7 +47,7 @@ export default function App() {
     }
   }, [])
  
-  // Save currentUserId to localStorage whenever it changes
+  
   useEffect(() => {
     if (currentUserId) {
       localStorage.setItem('currentUserId', currentUserId)
