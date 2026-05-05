@@ -101,10 +101,19 @@ export const createMeetingRequest = async (requesterId, requesteeId, proposedTim
 
 export const updateMeetingRequestStatus = async (requestId, statusId) => {
   try {
+    
+    const getResponse = await fetch(`${API_URL}/meetingRequests/${requestId}`)
+    if (!getResponse.ok) throw new Error('Failed to fetch meeting request')
+    const currentRequest = await getResponse.json()
+
+    
     const response = await fetch(`${API_URL}/meetingRequests/${requestId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ statusId })
+      body: JSON.stringify({
+        ...currentRequest,  
+        statusId            
+      })
     })
     if (!response.ok) throw new Error('Failed to update meeting request')
     return await response.json()
@@ -127,7 +136,7 @@ export const deleteMeetingRequest = async (requestId) => {
   }
 }
 
-// Statuses
+
 export const getStatuses = async () => {
   try {
     const response = await fetch(`${API_URL}/statuses`)
