@@ -54,6 +54,38 @@ export default function RequestPage({
     : [];
 
   const handleRequestMeeting = async (proposedTimeId) => {
+    // Check if currentUser already has an accepted meeting at this time
+    const acceptedMeetingConflict = meetingRequests.find(
+      (req) =>
+        req.statusId === 2 && // accepted
+        (req.requesterId === currentUser.id ||
+          req.requesteeId === currentUser.id) &&
+        req.proposedTimeId === proposedTimeId,
+    );
+
+    if (acceptedMeetingConflict) {
+      const conflictTime = availableTimes.find((t) => t.id === proposedTimeId);
+      alert(
+        `You already have an accepted meeting at ${conflictTime?.time}. Please cancel that meeting first.`,
+      );
+      return;
+    }
+
+    // Check if a request already exists for this time with this user
+    const existingRequest = meetingRequests.find(
+      (req) =>
+        req.requesterId === currentUser.id &&
+        req.requesteeId === parseInt(selectedUserId) &&
+        req.proposedTimeId === proposedTimeId,
+    );
+
+    if (existingRequest) {
+      alert(
+        "You have already requested a meeting at this time with this user.",
+      );
+      return;
+    }
+
     await onRequestMeeting(
       currentUser.id,
       parseInt(selectedUserId),
