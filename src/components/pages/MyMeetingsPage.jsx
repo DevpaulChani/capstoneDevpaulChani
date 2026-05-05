@@ -17,7 +17,7 @@ export default function MyMeetingsPage({
     navigate("/");
   };
 
-  // Get accepted meetings for current user
+  // Get accepted meetings for current user (either requester or requestee)
   const myMeetings = meetingRequests.filter((req) => req.statusId === 2);
 
   const getMeetingDetails = (meeting) => {
@@ -39,8 +39,11 @@ export default function MyMeetingsPage({
 
   return (
     <div>
-      <h1>My Meetings Page</h1>
-      <nav>
+      <div className="page-header">
+        <h1>My Meetings</h1>
+      </div>
+      
+      <nav className="page-nav">
         <button onClick={() => navigate("/app/my-meetings")}>
           My Meetings
         </button>
@@ -49,34 +52,36 @@ export default function MyMeetingsPage({
         <button onClick={handleLogout}>Logout</button>
       </nav>
 
-      <h2>Upcoming Meetings</h2>
-      {myMeetings.length === 0 ? (
-        <p>No scheduled meetings yet</p>
-      ) : (
-        <div>
-          {myMeetings.map((meeting) => {
-            const details = getMeetingDetails(meeting);
-            return (
-              <div
-                key={meeting.id}
-                style={{
-                  border: "1px solid black",
-                  padding: "10px",
-                  marginBottom: "10px",
-                }}
-              >
-                <p>
-                  You have a meeting at {details.time} with {details.otherUser}{" "}
-                  ({details.role})
-                </p>
-                <button onClick={() => handleCancelMeeting(meeting.id)}>
-                  Cancel Meeting
-                </button>
-              </div>
-            );
-          })}
+      <div className="meetings-container">
+        <div className="meetings-header">
+          <h2>Upcoming Meetings</h2>
         </div>
-      )}
+
+        {myMeetings.length === 0 ? (
+          <div className="empty-state">
+            <p>No scheduled meetings yet</p>
+          </div>
+        ) : (
+          <div>
+            {myMeetings.map((meeting) => {
+              const details = getMeetingDetails(meeting);
+              return (
+                <div key={meeting.id} className="meeting-card">
+                  <p>
+                    You have a meeting at <strong>{details.time}</strong> with <strong>{details.otherUser}</strong> ({details.role})
+                  </p>
+                  <button 
+                    onClick={() => handleCancelMeeting(meeting.id)}
+                    className="danger"
+                  >
+                    Cancel Meeting
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

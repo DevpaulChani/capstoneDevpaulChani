@@ -1,39 +1,23 @@
 {
   "users": [
-    { "id": 1, "userName": "Mark" },
-    { "id": 2, "userName": "John" },
-    { "id": 3, "userName": "Tim" },
-    { "id": 4, "userName": "Jim" }
+    { "id": 1, "userName": "mark" },
+    { "id": 2, "userName": "john" },
+    { "id": 3, "userName": "tim" },
+    { "id": 4, "userName": "jim" }
   ],
   "availableTimes": [
     { "id": 1, "userId": 1, "time": "2pm" },
-    { "id": 2, "userId": 1, "time": "3pm" },
-    { "id": 3, "userId": 2, "time": "2pm" },
-    { "id": 4, "userId": 2, "time": "4pm" },
-    { "id": 5, "userId": 3, "time": "1pm" },
-    { "id": 6, "userId": 4, "time": "3pm" }
+    { "id": 4, "userId": 2, "time": "2pm" },
+    { "id": 7, "userId": 3, "time": "1pm" },
+    { "id": 10, "userId": 4, "time": "3pm" }
   ],
   "meetingRequests": [
     {
       "id": 1,
-      "requesterId": 1,
-      "requesteeId": 2,
-      "proposedTimeId": 3,
-      "statusId": 1
-    },
-    {
-      "id": 2,
       "requesterId": 3,
       "requesteeId": 1,
       "proposedTimeId": 1,
       "statusId": 1
-    },
-    {
-      "id": 3,
-      "requesterId": 1,
-      "requesteeId": 4,
-      "proposedTimeId": 6,
-      "statusId": 2
     }
   ],
   "statuses": [

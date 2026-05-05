@@ -25,25 +25,29 @@ export default function Register({ onRegister, users }) {
   }
  
   return (
-    <div>
-      <h1>Register</h1>
-      <form onSubmit={handleRegister}>
-        <div>
-          <label htmlFor="username">Username: </label>
-          <input
-            id="username"
-            type="text"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            placeholder="Enter a username"
-          />
+    <div className="auth-container">
+      <div className="auth-form">
+        <h1>Register</h1>
+        <form onSubmit={handleRegister}>
+          <div>
+            <label htmlFor="username">Username</label>
+            <input
+              id="username"
+              type="text"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              placeholder="Enter a username"
+            />
+          </div>
+          {error && <div className="error-message">{error}</div>}
+          <button type="submit">Register</button>
+        </form>
+        <div className="auth-footer">
+          <p>
+            Already have an account? <a href="/">Login</a>
+          </p>
         </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Register</button>
-      </form>
-      <p>
-        Already have an account? <a href="/">Login</a>
-      </p>
+      </div>
     </div>
   )
 }
