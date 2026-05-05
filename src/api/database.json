@@ -60,13 +60,6 @@
       "proposedTimeId": 1,
       "statusId": 2,
       "id": 1
-    },
-    {
-      "requesterId": 2,
-      "requesteeId": 5,
-      "proposedTimeId": 13,
-      "statusId": 1,
-      "id": 2
     }
   ],
   "statuses": [
