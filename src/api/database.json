@@ -43,32 +43,23 @@
       "time": "3pm"
     },
     {
+      "userId": 1,
+      "time": "3pm",
+      "id": 12
+    },
+    {
       "userId": 5,
-      "time": "7pm",
-      "id": 11
+      "time": "2pm",
+      "id": 13
     }
   ],
   "meetingRequests": [
     {
-      "requesterId": 3,
+      "requesterId": 2,
       "requesteeId": 1,
       "proposedTimeId": 1,
       "statusId": 2,
       "id": 1
-    },
-    {
-      "requesterId": 1,
-      "requesteeId": 2,
-      "proposedTimeId": 4,
-      "statusId": 2,
-      "id": 2
-    },
-    {
-      "requesterId": 3,
-      "requesteeId": 1,
-      "proposedTimeId": 1,
-      "statusId": 1,
-      "id": 3
     }
   ],
   "statuses": [
