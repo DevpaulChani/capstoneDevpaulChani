@@ -18,7 +18,12 @@ export default function MyMeetingsPage({
   };
 
   // Get accepted meetings for current user (either requester or requestee)
-  const myMeetings = meetingRequests.filter((req) => req.statusId === 2);
+  const myMeetings = meetingRequests.filter(
+    (req) =>
+      req.statusId === 2 &&
+      (req.requesterId === currentUser.id ||
+        req.requesteeId === currentUser.id),
+  );
 
   const getMeetingDetails = (meeting) => {
     const time = availableTimes.find((t) => t.id === meeting.proposedTimeId);
@@ -42,7 +47,7 @@ export default function MyMeetingsPage({
       <div className="page-header">
         <h1>My Meetings</h1>
       </div>
-      
+
       <nav className="page-nav">
         <button onClick={() => navigate("/app/my-meetings")}>
           My Meetings
@@ -68,9 +73,10 @@ export default function MyMeetingsPage({
               return (
                 <div key={meeting.id} className="meeting-card">
                   <p>
-                    You have a meeting at <strong>{details.time}</strong> with <strong>{details.otherUser}</strong> ({details.role})
+                    You have a meeting at <strong>{details.time}</strong> with{" "}
+                    <strong>{details.otherUser}</strong> ({details.role})
                   </p>
-                  <button 
+                  <button
                     onClick={() => handleCancelMeeting(meeting.id)}
                     className="danger"
                   >

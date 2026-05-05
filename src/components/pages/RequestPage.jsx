@@ -1,48 +1,105 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
- 
-export default function RequestPage({ 
-  currentUser, 
-  users, 
-  availableTimes, 
-  meetingRequests, 
-  onLogout, 
-  onRequestMeeting, 
-  onAcceptRequest, 
-  onDenyRequest 
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+export default function RequestPage({
+  currentUser,
+  users,
+  availableTimes,
+  meetingRequests,
+  onLogout,
+  onRequestMeeting,
+  onAcceptRequest,
+  onDenyRequest,
 }) {
-  const navigate = useNavigate()
-  const [selectedUserId, setSelectedUserId] = useState('')
- 
-  if (!currentUser) return <div>Loading...</div>
- 
+  const navigate = useNavigate();
+  const [selectedUserId, setSelectedUserId] = useState("");
+
+  if (!currentUser) return <div>Loading...</div>;
+
   const handleLogout = () => {
-    onLogout()
-    navigate('/')
-  }
- 
-  const otherUsers = users.filter(u => u.id !== currentUser.id)
-  const selectedUser = selectedUserId ? users.find(u => u.id === parseInt(selectedUserId)) : null
-  const selectedUserTimes = selectedUserId ? availableTimes.filter(t => t.userId === parseInt(selectedUserId)) : []
- 
+    onLogout();
+    navigate("/");
+  };
+
+  const otherUsers = users.filter((u) => u.id !== currentUser.id);
+  const selectedUser = selectedUserId
+    ? users.find((u) => u.id === parseInt(selectedUserId))
+    : null;
+
+  // Get time slots that don't have conflicts (no accepted meetings at those times)
+  const selectedUserTimes = selectedUserId
+    ? availableTimes.filter((t) => {
+        if (t.userId !== parseInt(selectedUserId)) return false;
+
+        // Check if currentUser already has an accepted meeting at this time
+        const currentUserConflict = meetingRequests.some(
+          (req) =>
+            req.statusId === 2 && // accepted
+            (req.requesterId === currentUser.id ||
+              req.requesteeId === currentUser.id) &&
+            req.proposedTimeId === t.id,
+        );
+
+        // Check if selectedUser already has an accepted meeting at this time
+        const selectedUserConflict = meetingRequests.some(
+          (req) =>
+            req.statusId === 2 && // accepted
+            (req.requesterId === parseInt(selectedUserId) ||
+              req.requesteeId === parseInt(selectedUserId)) &&
+            req.proposedTimeId === t.id,
+        );
+
+        return !currentUserConflict && !selectedUserConflict; // Only include if NO conflicts for either user
+      })
+    : [];
+
   const handleRequestMeeting = async (proposedTimeId) => {
-    await onRequestMeeting(currentUser.id, parseInt(selectedUserId), proposedTimeId)
-    setSelectedUserId('')
-  }
- 
+    await onRequestMeeting(
+      currentUser.id,
+      parseInt(selectedUserId),
+      proposedTimeId,
+    );
+    setSelectedUserId("");
+  };
+
   // Get pending requests to current user
   const pendingRequests = meetingRequests.filter(
-    req => req.requesteeId === currentUser.id && req.statusId === 1
-  )
- 
+    (req) => req.requesteeId === currentUser.id && req.statusId === 1,
+  );
+
   const handleAcceptRequest = async (requestId) => {
-    await onAcceptRequest(requestId)
-  }
- 
+    // Check for time conflicts
+    const request = meetingRequests.find((r) => r.id === requestId);
+    if (!request) return;
+
+    const requestedTime = availableTimes.find(
+      (t) => t.id === request.proposedTimeId,
+    );
+
+    // Check if user already has an accepted meeting at this time
+    const conflictingMeeting = meetingRequests.find(
+      (req) =>
+        req.statusId === 2 && // accepted
+        (req.requesterId === currentUser.id ||
+          req.requesteeId === currentUser.id) &&
+        req.proposedTimeId === request.proposedTimeId &&
+        req.id !== requestId, // don't count the current request
+    );
+
+    if (conflictingMeeting) {
+      alert(
+        `You already have a meeting at ${requestedTime?.time}. Please cancel that meeting first.`,
+      );
+      return;
+    }
+
+    await onAcceptRequest(requestId);
+  };
+
   const handleDenyRequest = async (requestId) => {
-    await onDenyRequest(requestId)
-  }
- 
+    await onDenyRequest(requestId);
+  };
+
   return (
     <div>
       <div className="page-header">
@@ -50,12 +107,14 @@ export default function RequestPage({
       </div>
 
       <nav className="page-nav">
-        <button onClick={() => navigate('/app/my-meetings')}>My Meetings</button>
-        <button onClick={() => navigate('/app/my-times')}>My Times</button>
-        <button onClick={() => navigate('/app/request')}>Request</button>
+        <button onClick={() => navigate("/app/my-meetings")}>
+          My Meetings
+        </button>
+        <button onClick={() => navigate("/app/my-times")}>My Times</button>
+        <button onClick={() => navigate("/app/request")}>Request</button>
         <button onClick={handleLogout}>Logout</button>
       </nav>
- 
+
       <div className="request-container">
         {/* Pending Requests Section */}
         <div className="pending-requests-section">
@@ -66,22 +125,25 @@ export default function RequestPage({
             </div>
           ) : (
             <div>
-              {pendingRequests.map(req => {
-                const requester = users.find(u => u.id === req.requesterId)
-                const time = availableTimes.find(t => t.id === req.proposedTimeId)
+              {pendingRequests.map((req) => {
+                const requester = users.find((u) => u.id === req.requesterId);
+                const time = availableTimes.find(
+                  (t) => t.id === req.proposedTimeId,
+                );
                 return (
                   <div key={req.id} className="request-card">
                     <p>
-                      <strong>{requester?.userName}</strong> requested a meeting at <strong>{time?.time}</strong>
+                      <strong>{requester?.userName}</strong> requested a meeting
+                      at <strong>{time?.time}</strong>
                     </p>
                     <div className="request-card-actions">
-                      <button 
+                      <button
                         onClick={() => handleAcceptRequest(req.id)}
                         className="success"
                       >
                         Accept
                       </button>
-                      <button 
+                      <button
                         onClick={() => handleDenyRequest(req.id)}
                         className="danger"
                       >
@@ -89,32 +151,32 @@ export default function RequestPage({
                       </button>
                     </div>
                   </div>
-                )
+                );
               })}
             </div>
           )}
         </div>
- 
+
         {/* Request a Meeting Section */}
         <div className="request-form-section">
           <h2>Request a Meeting</h2>
-          
+
           <div className="user-selector">
             <label htmlFor="user-select">Select User</label>
-            <select 
+            <select
               id="user-select"
-              value={selectedUserId} 
+              value={selectedUserId}
               onChange={(e) => setSelectedUserId(e.target.value)}
             >
               <option value="">-- Select a user --</option>
-              {otherUsers.map(user => (
+              {otherUsers.map((user) => (
                 <option key={user.id} value={user.id}>
                   {user.userName}
                 </option>
               ))}
             </select>
           </div>
- 
+
           {selectedUser && (
             <div className="available-times-section">
               <h3>{selectedUser.userName}'s Available Times</h3>
@@ -124,10 +186,10 @@ export default function RequestPage({
                 </div>
               ) : (
                 <ul className="available-times-list">
-                  {selectedUserTimes.map(time => (
+                  {selectedUserTimes.map((time) => (
                     <li key={time.id}>
                       <span>{time.time}</span>
-                      <button 
+                      <button
                         onClick={() => handleRequestMeeting(time.id)}
                         className="success"
                       >
@@ -142,5 +204,5 @@ export default function RequestPage({
         </div>
       </div>
     </div>
-  )
+  );
 }

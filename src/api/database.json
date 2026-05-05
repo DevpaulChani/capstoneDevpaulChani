@@ -1,27 +1,84 @@
 {
   "users": [
-    { "id": 1, "userName": "mark" },
-    { "id": 2, "userName": "john" },
-    { "id": 3, "userName": "tim" },
-    { "id": 4, "userName": "jim" }
+    {
+      "id": 1,
+      "userName": "mark"
+    },
+    {
+      "id": 2,
+      "userName": "john"
+    },
+    {
+      "id": 3,
+      "userName": "tim"
+    },
+    {
+      "id": 4,
+      "userName": "jim"
+    },
+    {
+      "userName": "dev",
+      "id": 5
+    }
   ],
   "availableTimes": [
-    { "id": 1, "userId": 1, "time": "2pm" },
-    { "id": 4, "userId": 2, "time": "2pm" },
-    { "id": 7, "userId": 3, "time": "1pm" },
-    { "id": 10, "userId": 4, "time": "3pm" }
+    {
+      "id": 1,
+      "userId": 1,
+      "time": "2pm"
+    },
+    {
+      "id": 4,
+      "userId": 2,
+      "time": "4pm"
+    },
+    {
+      "id": 7,
+      "userId": 3,
+      "time": "1pm"
+    },
+    {
+      "id": 10,
+      "userId": 4,
+      "time": "3pm"
+    },
+    {
+      "userId": 5,
+      "time": "7pm",
+      "id": 11
+    }
   ],
   "meetingRequests": [
     {
-      "id": 1,
       "requesterId": 3,
       "requesteeId": 1,
       "proposedTimeId": 1,
-      "statusId": 1
+      "statusId": 2,
+      "id": 1
+    },
+    {
+      "requesterId": 1,
+      "requesteeId": 2,
+      "proposedTimeId": 4,
+      "statusId": 2,
+      "id": 2
+    },
+    {
+      "requesterId": 3,
+      "requesteeId": 1,
+      "proposedTimeId": 1,
+      "statusId": 1,
+      "id": 3
     }
   ],
   "statuses": [
-    { "id": 1, "status": "pending" },
-    { "id": 2, "status": "accepted" }
+    {
+      "id": 1,
+      "status": "pending"
+    },
+    {
+      "id": 2,
+      "status": "accepted"
+    }
   ]
 }

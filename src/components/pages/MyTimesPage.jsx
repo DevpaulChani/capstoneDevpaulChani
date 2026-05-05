@@ -1,31 +1,37 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
- 
-export default function MyTimesPage({ currentUser, availableTimes, onLogout, onAddTime, onDeleteTime }) {
-  const navigate = useNavigate()
-  const [newTime, setNewTime] = useState('')
- 
-  if (!currentUser) return <div>Loading...</div>
- 
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+export default function MyTimesPage({
+  currentUser,
+  availableTimes,
+  onLogout,
+  onAddTime,
+  onDeleteTime,
+}) {
+  const navigate = useNavigate();
+  const [newTime, setNewTime] = useState("");
+
+  if (!currentUser) return <div>Loading...</div>;
+
   const handleLogout = () => {
-    onLogout()
-    navigate('/')
-  }
- 
-  const myTimes = availableTimes.filter(t => t.userId === currentUser.id)
- 
+    onLogout();
+    navigate("/");
+  };
+
+  const myTimes = availableTimes.filter((t) => t.userId === currentUser.id);
+
   const handleAddTime = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (newTime.trim()) {
-      await onAddTime(currentUser.id, newTime)
-      setNewTime('')
+      await onAddTime(currentUser.id, newTime);
+      setNewTime("");
     }
-  }
- 
+  };
+
   const handleDeleteTime = async (timeId) => {
-    await onDeleteTime(timeId)
-  }
- 
+    await onDeleteTime(timeId);
+  };
+
   return (
     <div>
       <div className="page-header">
@@ -33,12 +39,14 @@ export default function MyTimesPage({ currentUser, availableTimes, onLogout, onA
       </div>
 
       <nav className="page-nav">
-        <button onClick={() => navigate('/app/my-meetings')}>My Meetings</button>
-        <button onClick={() => navigate('/app/my-times')}>My Times</button>
-        <button onClick={() => navigate('/app/request')}>Request</button>
+        <button onClick={() => navigate("/app/my-meetings")}>
+          My Meetings
+        </button>
+        <button onClick={() => navigate("/app/my-times")}>My Times</button>
+        <button onClick={() => navigate("/app/request")}>Request</button>
         <button onClick={handleLogout}>Logout</button>
       </nav>
- 
+
       <div className="times-container">
         <div className="times-section">
           <h2>Your Available Times</h2>
@@ -48,10 +56,10 @@ export default function MyTimesPage({ currentUser, availableTimes, onLogout, onA
             </div>
           ) : (
             <ul className="times-list">
-              {myTimes.map(time => (
+              {myTimes.map((time) => (
                 <li key={time.id}>
                   <span>{time.time}</span>
-                  <button 
+                  <button
                     onClick={() => handleDeleteTime(time.id)}
                     className="danger"
                   >
@@ -62,7 +70,7 @@ export default function MyTimesPage({ currentUser, availableTimes, onLogout, onA
             </ul>
           )}
         </div>
- 
+
         <div className="add-time-form">
           <h3>Add New Time</h3>
           <form onSubmit={handleAddTime}>
@@ -70,12 +78,14 @@ export default function MyTimesPage({ currentUser, availableTimes, onLogout, onA
               type="text"
               value={newTime}
               onChange={(e) => setNewTime(e.target.value)}
-              placeholder="e.g., 2pm Monday, 3pm Tuesday"
+              placeholder="e.g., 2pm, 3pm"
             />
-            <button type="submit" className="success">Add Time</button>
+            <button type="submit" className="success">
+              Add Time
+            </button>
           </form>
         </div>
       </div>
     </div>
-  )
+  );
 }
