@@ -55,9 +55,9 @@
   ],
   "meetingRequests": [
     {
-      "requesterId": 2,
-      "requesteeId": 1,
-      "proposedTimeId": 1,
+      "requesterId": 1,
+      "requesteeId": 2,
+      "proposedTimeId": 4,
       "statusId": 2,
       "id": 1
     }
